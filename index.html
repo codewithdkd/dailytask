@@ -1,4 +1,4 @@
- <!-- ===================================================== -->
+  <!-- ===================================================== -->
 <!-- MOBILE PERFORMANCE TRACKER (ADVANCED CALORIE SYSTEM) -->
 <!-- Owner: Deepak Kumar Deep -->
 <!-- ===================================================== -->
@@ -42,18 +42,6 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 <div class="summary-box"><strong id="sumTaken">0</strong>Consumed</div>
 <div class="summary-box"><strong id="sumDeficit">0</strong>Deficit</div>
 <div class="summary-box"><strong id="sumSleep">0</strong>Sleep (hrs)</div>
-</div>
-</div>
-<div class="card">
-<h3>This Month Summary</h3>
-<div class="summary-grid">
-  <div class="summary-box"><strong id="mStudy">0</strong>Study (hrs)</div>
-  <div class="summary-box"><strong id="mRun">0</strong>Run (km)</div>
-  <div class="summary-box"><strong id="mBurn">0</strong>Burned</div>
-  <div class="summary-box"><strong id="mTaken">0</strong>Taken</div>
-  <div class="summary-box" style="grid-column:span 2">
-    <strong id="mDeficit">0</strong>Total Deficit
-  </div>
 </div>
 </div>
 
@@ -118,7 +106,7 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 
 <script>
 
-const scriptURL="https://script.google.com/macros/s/AKfycbxNAKcyot31q727Bx5nMnGJ577tW3a7YUGWnVGbtwHCTwYouQzj6bD4hOaPlYsEvvWv/exec";
+const scriptURL="https://script.google.com/macros/s/AKfycbwzoSmcfOnz0meDVEtyV0fJvNVQlnJOqhNjrN34fNp_uMlDJ6Wf2sYNwAS7VKudSSoC/exec";
 const BASE_BMR=1700; // default body burn
 
 const today=new Date().toISOString().split('T')[0];
@@ -144,36 +132,26 @@ const totalBurn=BASE_BMR + exerciseBurn;
 const taken=Number(document.getElementById("taken").value||0);
 const deficit= totalBurn - taken;  // ✅ Correct Formula
 
-const data = {
-  date: today,
-  study: Number(document.getElementById("study").value || 0),
-  sleepTime: document.getElementById("sleepTime").value,
-  wakeTime: document.getElementById("wakeTime").value,
-  sleepDuration: Number(sleep),
-  running: Number(document.getElementById("running").value || 0),
-  burned: totalBurn,
-  taken: taken,
-  deficit: deficit,
-  water: Number(document.getElementById("water").value || 0),
-  weight: Number(document.getElementById("weight").value || 0),
-  notes: document.getElementById("notes").value
+const data={
+date:today,
+study:Number(document.getElementById("study").value||0),
+sleepDuration:Number(sleep),
+running:Number(document.getElementById("running").value||0),
+caloriesBurned:totalBurn,
+exerciseBurn:exerciseBurn,
+caloriesTaken:taken,
+deficit:deficit,
+water:Number(document.getElementById("water").value||0),
+weight:Number(document.getElementById("weight").value||0),
+notes:document.getElementById("notes").value
 };
 
-
-fetch(scriptURL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(data)
-})
-.then(res => res.text())
-.then(msg => {
-  updateSummary(totalBurn, taken, deficit, sleep);
-  alert(msg);
-})
-.catch(err => alert("Error: " + err));
-
+fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
+.then(res=>res.text())
+.then(()=>{
+updateSummary(totalBurn,taken,deficit,sleep);
+alert("Saved Successfully ✅");
+});
 }
 
 function updateSummary(burn,taken,deficit,sleep){
@@ -183,24 +161,6 @@ document.getElementById("sumDeficit").innerText=deficit;
 document.getElementById("sumSleep").innerText=sleep;
 }
 
-</script>
-<script>
-function loadMonthlySummary(){
-  const month = new Date().toISOString().slice(0,7); // YYYY-MM
-
-  fetch(scriptURL + "?month=" + month)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("mStudy").innerText = data.study || 0;
-      document.getElementById("mRun").innerText = data.running || 0;
-      document.getElementById("mBurn").innerText = data.burn || 0;
-      document.getElementById("mTaken").innerText = data.taken || 0;
-      document.getElementById("mDeficit").innerText = data.deficit || 0;
-    })
-    .catch(err => console.log("Monthly summary error", err));
-}
-
-loadMonthlySummary();
 </script>
 
 </body>
