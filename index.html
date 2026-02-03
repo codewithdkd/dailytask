@@ -160,12 +160,20 @@ const data = {
 };
 
 
-fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
-.then(res=>res.text())
-.then(()=>{
-updateSummary(totalBurn,taken,deficit,sleep);
-alert("Saved Successfully ✅");
-});
+fetch(scriptURL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(data)
+})
+.then(res => res.text())
+.then(msg => {
+  updateSummary(totalBurn, taken, deficit, sleep);
+  alert(msg);
+})
+.catch(err => alert("Error: " + err));
+
 }
 
 function updateSummary(burn,taken,deficit,sleep){
