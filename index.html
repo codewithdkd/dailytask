@@ -1,0 +1,168 @@
+ <!-- ===================================================== -->
+<!-- MOBILE PERFORMANCE TRACKER (ADVANCED CALORIE SYSTEM) -->
+<!-- Owner: Deepak Kumar Deep -->
+<!-- ===================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Daily Performance Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{--primary:#2563eb;--bg:#f1f5f9;--card:#ffffff;--text:#0f172a}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:18px;text-align:center;font-weight:600;font-size:18px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0}
+.container{max-width:500px;margin:auto;padding:15px}
+.card{background:var(--card);padding:18px;border-radius:16px;box-shadow:0 5px 20px rgba(0,0,0,0.06);margin-bottom:18px}
+h3{margin:0 0 15px 0;font-size:16px}
+.form-group{margin-bottom:14px}
+label{font-size:13px;font-weight:500;display:block;margin-bottom:6px}
+input,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #d1d5db;font-size:14px;box-sizing:border-box}
+textarea{resize:none;height:70px}
+button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--primary);color:white;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px}
+.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.summary-box{background:#f8fafc;padding:14px;border-radius:12px;text-align:center;font-size:13px}
+.summary-box strong{display:block;font-size:18px;margin-bottom:4px}
+.small-note{font-size:11px;color:#64748b;margin-top:4px}
+</style>
+</head>
+<body>
+
+<header>Daily Performance Tracker</header>
+
+<div class="container">
+
+<div class="card">
+<h3>Today's Summary</h3>
+<div class="summary-grid">
+<div class="summary-box"><strong id="sumBurn">0</strong>Total Burn</div>
+<div class="summary-box"><strong id="sumTaken">0</strong>Consumed</div>
+<div class="summary-box"><strong id="sumDeficit">0</strong>Deficit</div>
+<div class="summary-box"><strong id="sumSleep">0</strong>Sleep (hrs)</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Enter Daily Data</h3>
+
+<div class="form-group">
+<label>Date</label>
+<input type="date" id="date" readonly>
+</div>
+
+<div class="form-group">
+<label>Study Hours</label>
+<input type="number" step="0.1" id="study">
+</div>
+
+<div class="form-group">
+<label>Sleep Time</label>
+<input type="time" id="sleepTime">
+</div>
+
+<div class="form-group">
+<label>Wake Time</label>
+<input type="time" id="wakeTime">
+</div>
+
+<div class="form-group">
+<label>Running Distance (km)</label>
+<input type="number" step="0.1" id="running">
+</div>
+
+<div class="form-group">
+<label>Exercise Calories Burned</label>
+<input type="number" id="exerciseBurn" placeholder="Only workout calories">
+<div class="small-note">Your body baseline burn (BMR) is auto-added: 1700 kcal</div>
+</div>
+
+<div class="form-group">
+<label>Calories Consumed</label>
+<input type="number" id="taken">
+</div>
+
+<div class="form-group">
+<label>Water Intake (L)</label>
+<input type="number" step="0.1" id="water">
+</div>
+
+<div class="form-group">
+<label>Weight (kg)</label>
+<input type="number" step="0.1" id="weight">
+</div>
+
+<div class="form-group">
+<label>Notes</label>
+<textarea id="notes"></textarea>
+</div>
+
+<button onclick="submitData()">Save Today's Entry</button>
+</div>
+
+</div>
+
+<script>
+
+const scriptURL="https://script.google.com/macros/s/AKfycbwzoSmcfOnz0meDVEtyV0fJvNVQlnJOqhNjrN34fNp_uMlDJ6Wf2sYNwAS7VKudSSoC/exec";
+const BASE_BMR=1700; // default body burn
+
+const today=new Date().toISOString().split('T')[0];
+document.getElementById("date").value=today;
+
+function calculateSleep(s,w){
+if(!s||!w) return 0;
+let a=new Date(`1970-01-01T${s}:00`);
+let b=new Date(`1970-01-01T${w}:00`);
+let diff=(b-a)/(1000*60*60);
+if(diff<0) diff+=24;
+return diff.toFixed(2);
+}
+
+function submitData(){
+
+const sleep=calculateSleep(
+document.getElementById("sleepTime").value,
+document.getElementById("wakeTime").value);
+
+const exerciseBurn=Number(document.getElementById("exerciseBurn").value||0);
+const totalBurn=BASE_BMR + exerciseBurn;
+const taken=Number(document.getElementById("taken").value||0);
+const deficit= totalBurn - taken;  // ✅ Correct Formula
+
+const data={
+date:today,
+study:Number(document.getElementById("study").value||0),
+sleepDuration:Number(sleep),
+running:Number(document.getElementById("running").value||0),
+caloriesBurned:totalBurn,
+exerciseBurn:exerciseBurn,
+caloriesTaken:taken,
+deficit:deficit,
+water:Number(document.getElementById("water").value||0),
+weight:Number(document.getElementById("weight").value||0),
+notes:document.getElementById("notes").value
+};
+
+fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
+.then(res=>res.text())
+.then(()=>{
+updateSummary(totalBurn,taken,deficit,sleep);
+alert("Saved Successfully ✅");
+});
+}
+
+function updateSummary(burn,taken,deficit,sleep){
+document.getElementById("sumBurn").innerText=burn;
+document.getElementById("sumTaken").innerText=taken;
+document.getElementById("sumDeficit").innerText=deficit;
+document.getElementById("sumSleep").innerText=sleep;
+}
+
+</script>
+
+</body>
+</html>
+
