@@ -1,5 +1,5 @@
 <!-- ===================================================== -->
-<!-- ELITE PERFORMANCE ANALYTICS SYSTEM (NO LOGIN) -->
+<!-- MOBILE-FIRST PROFESSIONAL PERFORMANCE TRACKER -->
 <!-- Owner: Deepak Kumar Deep -->
 <!-- GitHub Pages + Google Sheets Connected -->
 <!-- ===================================================== -->
@@ -8,91 +8,194 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deepak Elite Performance System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Daily Performance Tracker</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{font-family:Segoe UI,sans-serif;margin:0;background:#eef2f7;transition:.3s}
-.dark{background:#0f172a;color:white}
-header{background:#111827;color:white;padding:15px;text-align:center}
-.container{max-width:1300px;margin:20px auto;padding:15px}
-.card{background:white;padding:20px;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,0.08);margin-bottom:20px}
-.dark .card{background:#1e293b}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc}
-button{background:#2563eb;color:white;border:none;cursor:pointer;font-weight:600}
-button:hover{opacity:.9}
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
-.box{background:#f3f4f6;padding:15px;border-radius:10px;text-align:center}
-.dark .box{background:#334155}
-.progress{height:10px;background:#ddd;border-radius:10px;margin-top:5px}
-.progress-bar{height:10px;background:#22c55e;border-radius:10px;width:0%}
-.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-@media(max-width:768px){.grid{grid-template-columns:1fr}}
+:root{
+--primary:#2563eb;
+--bg:#f1f5f9;
+--card:#ffffff;
+--text:#0f172a;
+}
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+header{
+padding:18px;
+text-align:center;
+font-weight:600;
+font-size:18px;
+background:var(--card);
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+padding:15px;
+}
+
+.card{
+background:var(--card);
+padding:18px;
+border-radius:16px;
+box-shadow:0 5px 20px rgba(0,0,0,0.06);
+margin-bottom:18px;
+}
+
+h3{
+margin:0 0 15px 0;
+font-size:16px;
+}
+
+.form-group{
+margin-bottom:14px;
+}
+
+label{
+font-size:13px;
+font-weight:500;
+display:block;
+margin-bottom:6px;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:1px solid #d1d5db;
+font-size:14px;
+box-sizing:border-box;
+}
+
+textarea{resize:none;height:70px}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:var(--primary);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+margin-top:10px;
+}
+
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.summary-box{
+background:#f8fafc;
+padding:14px;
+border-radius:12px;
+text-align:center;
+font-size:13px;
+}
+
+.summary-box strong{
+display:block;
+font-size:18px;
+margin-bottom:4px;
+}
+
+canvas{
+margin-top:10px;
+}
+
 </style>
 </head>
 <body>
 
 <header>
-<h2>Elite Performance Analytics Dashboard</h2>
+Daily Performance Tracker
 </header>
 
 <div class="container">
 
-<div class="top-actions">
-<button onclick="toggleDark()">Dark Mode</button>
-<button onclick="exportCSV()">Export Sheet</button>
-</div>
-
 <div class="card">
-<h3>Performance Summary</h3>
-<div class="summary">
-<div class="box"><strong id="sumStudy">0</strong><br>Study</div>
-<div class="box"><strong id="sumSleep">0</strong><br>Sleep</div>
-<div class="box"><strong id="sumRun">0</strong><br>Running</div>
-<div class="box"><strong id="sumDeficit">0</strong><br>Deficit</div>
-<div class="box"><strong id="streak">0</strong><br>Streak 🔥</div>
+<h3>Today's Summary</h3>
+<div class="summary-grid">
+<div class="summary-box"><strong id="sumStudy">0</strong>Study (hrs)</div>
+<div class="summary-box"><strong id="sumSleep">0</strong>Sleep (hrs)</div>
+<div class="summary-box"><strong id="sumRun">0</strong>Running (km)</div>
+<div class="summary-box"><strong id="sumDeficit">0</strong>Deficit</div>
 </div>
 </div>
 
 <div class="card">
-<h3>Goal Tracking</h3>
-<label>Daily Study Goal (hrs)</label>
-<input type="number" id="studyGoal" value="8">
-<div class="progress"><div id="studyBar" class="progress-bar"></div></div>
+<h3>Enter Daily Data</h3>
 
-<label>Daily Running Goal (km)</label>
-<input type="number" id="runGoal" value="5">
-<div class="progress"><div id="runBar" class="progress-bar"></div></div>
+<div class="form-group">
+<label>Date</label>
+<input type="date" id="date" readonly>
+</div>
+
+<div class="form-group">
+<label>Study Hours</label>
+<input type="number" step="0.1" id="study">
+</div>
+
+<div class="form-group">
+<label>Sleep Time</label>
+<input type="time" id="sleepTime">
+</div>
+
+<div class="form-group">
+<label>Wake Time</label>
+<input type="time" id="wakeTime">
+</div>
+
+<div class="form-group">
+<label>Running Distance (km)</label>
+<input type="number" step="0.1" id="running">
+</div>
+
+<div class="form-group">
+<label>Calories Burned</label>
+<input type="number" id="burned">
+</div>
+
+<div class="form-group">
+<label>Calories Taken</label>
+<input type="number" id="taken">
+</div>
+
+<div class="form-group">
+<label>Water Intake (L)</label>
+<input type="number" step="0.1" id="water">
+</div>
+
+<div class="form-group">
+<label>Weight (kg)</label>
+<input type="number" step="0.1" id="weight">
+</div>
+
+<div class="form-group">
+<label>Notes</label>
+<textarea id="notes"></textarea>
+</div>
+
+<button onclick="submitData()">Save Today's Entry</button>
 </div>
 
 <div class="card">
-<h3>Enter / Update Data</h3>
-<div class="grid">
-<div>
-<label>Date</label><input type="date" id="date">
-<label>Study Hours</label><input type="number" step="0.1" id="study">
-<label>Sleep Time</label><input type="time" id="sleepTime">
-<label>Wake Time</label><input type="time" id="wakeTime">
-<label>Running KM</label><input type="number" step="0.1" id="running">
-</div>
-<div>
-<label>Calories Burned</label><input type="number" id="burned">
-<label>Calories Taken</label><input type="number" id="taken">
-<label>Water Intake</label><input type="number" step="0.1" id="water">
-<label>Weight</label><input type="number" step="0.1" id="weight">
-<label>Notes</label><textarea id="notes"></textarea>
-</div>
-</div>
-<button onclick="submitData()">Save Data</button>
-</div>
-
-<div class="card">
-<h3>Analytics</h3>
+<h3>Weekly Study Trend</h3>
 <canvas id="studyChart"></canvas>
-<br>
-<canvas id="calorieChart"></canvas>
 </div>
 
 </div>
@@ -100,9 +203,10 @@ button:hover{opacity:.9}
 <script>
 
 const scriptURL="https://script.google.com/macros/s/AKfycbwzoSmcfOnz0meDVEtyV0fJvNVQlnJOqhNjrN34fNp_uMlDJ6Wf2sYNwAS7VKudSSoC/exec";
-let streakCount=0;
 
-function toggleDark(){document.body.classList.toggle("dark")}
+// Auto set today's date
+const today=new Date().toISOString().split('T')[0];
+document.getElementById("date").value=today;
 
 function calculateSleep(s,w){
 if(!s||!w) return 0;
@@ -124,7 +228,7 @@ const burned=Number(document.getElementById("burned").value||0);
 const taken=Number(document.getElementById("taken").value||0);
 
 const data={
-date:document.getElementById("date").value,
+date:today,
 study:study,
 sleepDuration:Number(sleep),
 running:run,
@@ -140,8 +244,6 @@ fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
 .then(res=>res.text())
 .then(()=>{
 updateSummary(data);
-updateGoals(study,run);
-updateStreak();
 alert("Saved Successfully ✅");
 });
 }
@@ -153,24 +255,9 @@ document.getElementById("sumRun").innerText=d.running;
 document.getElementById("sumDeficit").innerText=d.deficit;
 }
 
-function updateGoals(study,run){
-let sg=document.getElementById("studyGoal").value;
-let rg=document.getElementById("runGoal").value;
-document.getElementById("studyBar").style.width=(study/sg*100)+"%";
-document.getElementById("runBar").style.width=(run/rg*100)+"%";
-}
-
-function updateStreak(){streakCount++;document.getElementById("streak").innerText=streakCount}
-function exportCSV(){window.open(scriptURL)}
-
 new Chart(document.getElementById("studyChart"),{
 type:'line',
 data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Study Hours',data:[2,4,6,3,5,7,4],fill:false}]}
-});
-
-new Chart(document.getElementById("calorieChart"),{
-type:'bar',
-data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Calorie Deficit',data:[200,-100,300,150,400,-50,250]}]}
 });
 
 </script>
@@ -178,18 +265,4 @@ data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Calor
 </body>
 </html>
 
-/* ===================================================== */
-/* GOOGLE SHEET HEADERS (ROW 1 EXACT) */
-/* ===================================================== */
-/*
-Date
-Study Hours
-Sleep Duration
-Running KM
-Calorie Deficit
-Calories Burned
-Calories Taken
-Water Intake
-Weight
-Notes
-*/
+ 
