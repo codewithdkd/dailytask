@@ -144,19 +144,21 @@ const totalBurn=BASE_BMR + exerciseBurn;
 const taken=Number(document.getElementById("taken").value||0);
 const deficit= totalBurn - taken;  // ✅ Correct Formula
 
-const data={
-date:today,
-study:Number(document.getElementById("study").value||0),
-sleepDuration:Number(sleep),
-running:Number(document.getElementById("running").value||0),
-caloriesBurned:totalBurn,
-exerciseBurn:exerciseBurn,
-caloriesTaken:taken,
-deficit:deficit,
-water:Number(document.getElementById("water").value||0),
-weight:Number(document.getElementById("weight").value||0),
-notes:document.getElementById("notes").value
+const data = {
+  date: today,
+  study: Number(document.getElementById("study").value || 0),
+  sleepTime: document.getElementById("sleepTime").value,
+  wakeTime: document.getElementById("wakeTime").value,
+  sleepDuration: Number(sleep),
+  running: Number(document.getElementById("running").value || 0),
+  burned: totalBurn,
+  taken: taken,
+  deficit: deficit,
+  water: Number(document.getElementById("water").value || 0),
+  weight: Number(document.getElementById("weight").value || 0),
+  notes: document.getElementById("notes").value
 };
+
 
 fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
 .then(res=>res.text())
