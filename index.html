@@ -1,5 +1,5 @@
  <!-- ===================================================== -->
-<!-- MOBILE PERFORMANCE TRACKER (ADVANCED CALORIE SYSTEM) -->
+<!-- MOBILE PERFORMANCE TRACKER (MONTHLY ANALYTICS ADDED) -->
 <!-- Owner: Deepak Kumar Deep -->
 <!-- ===================================================== -->
 
@@ -9,7 +9,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Daily Performance Tracker</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root{--primary:#2563eb;--bg:#f1f5f9;--card:#ffffff;--text:#0f172a}
@@ -26,7 +25,7 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .summary-box{background:#f8fafc;padding:14px;border-radius:12px;text-align:center;font-size:13px}
 .summary-box strong{display:block;font-size:18px;margin-bottom:4px}
-.small-note{font-size:11px;color:#64748b;margin-top:4px}
+.month-box{background:#e0f2fe;padding:14px;border-radius:12px;text-align:center;margin-top:10px}
 </style>
 </head>
 <body>
@@ -43,6 +42,13 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 <div class="summary-box"><strong id="sumDeficit">0</strong>Deficit</div>
 <div class="summary-box"><strong id="sumSleep">0</strong>Sleep (hrs)</div>
 </div>
+
+<h3 style="margin-top:20px">This Month Summary</h3>
+<div class="summary-grid">
+<div class="month-box"><strong id="monthTaken">0</strong>Total Consumed</div>
+<div class="month-box"><strong id="monthBurn">0</strong>Total Burned</div>
+<div class="month-box"><strong id="monthDeficit">0</strong>Total Deficit</div>
+</div>
 </div>
 
 <div class="card">
@@ -54,8 +60,13 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 </div>
 
 <div class="form-group">
-<label>Study Hours</label>
-<input type="number" step="0.1" id="study">
+<label>Exercise Calories Burned</label>
+<input type="number" id="exerciseBurn">
+</div>
+
+<div class="form-group">
+<label>Calories Consumed</label>
+<input type="number" id="taken">
 </div>
 
 <div class="form-group">
@@ -68,37 +79,6 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 <input type="time" id="wakeTime">
 </div>
 
-<div class="form-group">
-<label>Running Distance (km)</label>
-<input type="number" step="0.1" id="running">
-</div>
-
-<div class="form-group">
-<label>Exercise Calories Burned</label>
-<input type="number" id="exerciseBurn" placeholder="Only workout calories">
-<div class="small-note">Your body baseline burn (BMR) is auto-added: 1700 kcal</div>
-</div>
-
-<div class="form-group">
-<label>Calories Consumed</label>
-<input type="number" id="taken">
-</div>
-
-<div class="form-group">
-<label>Water Intake (L)</label>
-<input type="number" step="0.1" id="water">
-</div>
-
-<div class="form-group">
-<label>Weight (kg)</label>
-<input type="number" step="0.1" id="weight">
-</div>
-
-<div class="form-group">
-<label>Notes</label>
-<textarea id="notes"></textarea>
-</div>
-
 <button onclick="submitData()">Save Today's Entry</button>
 </div>
 
@@ -107,10 +87,14 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 <script>
 
 const scriptURL="https://script.google.com/macros/s/AKfycbwzoSmcfOnz0meDVEtyV0fJvNVQlnJOqhNjrN34fNp_uMlDJ6Wf2sYNwAS7VKudSSoC/exec";
-const BASE_BMR=1700; // default body burn
+const BASE_BMR=1700;
 
-const today=new Date().toISOString().split('T')[0];
-document.getElementById("date").value=today;
+let monthConsumed=0;
+let monthBurned=0;
+let monthDeficit=0;
+
+const today=new Date();
+document.getElementById("date").value=today.toISOString().split('T')[0];
 
 function calculateSleep(s,w){
 if(!s||!w) return 0;
@@ -122,34 +106,33 @@ return diff.toFixed(2);
 }
 
 function submitData(){
+const exerciseBurn=Number(document.getElementById("exerciseBurn").value||0);
+const totalBurn=BASE_BMR + exerciseBurn;
+const taken=Number(document.getElementById("taken").value||0);
+const deficit= totalBurn - taken;
+
+monthConsumed+=taken;
+monthBurned+=totalBurn;
+monthDeficit+=deficit;
 
 const sleep=calculateSleep(
 document.getElementById("sleepTime").value,
 document.getElementById("wakeTime").value);
 
-const exerciseBurn=Number(document.getElementById("exerciseBurn").value||0);
-const totalBurn=BASE_BMR + exerciseBurn;
-const taken=Number(document.getElementById("taken").value||0);
-const deficit= totalBurn - taken;  // ✅ Correct Formula
-
 const data={
-date:today,
-study:Number(document.getElementById("study").value||0),
-sleepDuration:Number(sleep),
-running:Number(document.getElementById("running").value||0),
+date:today.toISOString().split('T')[0],
 caloriesBurned:totalBurn,
 exerciseBurn:exerciseBurn,
 caloriesTaken:taken,
 deficit:deficit,
-water:Number(document.getElementById("water").value||0),
-weight:Number(document.getElementById("weight").value||0),
-notes:document.getElementById("notes").value
+sleepDuration:Number(sleep)
 };
 
 fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
 .then(res=>res.text())
 .then(()=>{
 updateSummary(totalBurn,taken,deficit,sleep);
+updateMonthSummary();
 alert("Saved Successfully ✅");
 });
 }
@@ -159,6 +142,12 @@ document.getElementById("sumBurn").innerText=burn;
 document.getElementById("sumTaken").innerText=taken;
 document.getElementById("sumDeficit").innerText=deficit;
 document.getElementById("sumSleep").innerText=sleep;
+}
+
+function updateMonthSummary(){
+document.getElementById("monthTaken").innerText=monthConsumed;
+document.getElementById("monthBurn").innerText=monthBurned;
+document.getElementById("monthDeficit").innerText=monthDeficit;
 }
 
 </script>
