@@ -44,6 +44,18 @@ button{width:100%;padding:12px;border:none;border-radius:12px;background:var(--p
 <div class="summary-box"><strong id="sumSleep">0</strong>Sleep (hrs)</div>
 </div>
 </div>
+<div class="card">
+<h3>This Month Summary</h3>
+<div class="summary-grid">
+  <div class="summary-box"><strong id="mStudy">0</strong>Study (hrs)</div>
+  <div class="summary-box"><strong id="mRun">0</strong>Run (km)</div>
+  <div class="summary-box"><strong id="mBurn">0</strong>Burned</div>
+  <div class="summary-box"><strong id="mTaken">0</strong>Taken</div>
+  <div class="summary-box" style="grid-column:span 2">
+    <strong id="mDeficit">0</strong>Total Deficit
+  </div>
+</div>
+</div>
 
 <div class="card">
 <h3>Enter Daily Data</h3>
@@ -161,6 +173,24 @@ document.getElementById("sumDeficit").innerText=deficit;
 document.getElementById("sumSleep").innerText=sleep;
 }
 
+</script>
+<script>
+function loadMonthlySummary(){
+  const month = new Date().toISOString().slice(0,7); // YYYY-MM
+
+  fetch(scriptURL + "?month=" + month)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("mStudy").innerText = data.study || 0;
+      document.getElementById("mRun").innerText = data.running || 0;
+      document.getElementById("mBurn").innerText = data.burn || 0;
+      document.getElementById("mTaken").innerText = data.taken || 0;
+      document.getElementById("mDeficit").innerText = data.deficit || 0;
+    })
+    .catch(err => console.log("Monthly summary error", err));
+}
+
+loadMonthlySummary();
 </script>
 
 </body>
