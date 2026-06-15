@@ -1,212 +1,388 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Clock Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Florida Time Dashboard</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
+font-family:Arial,sans-serif;
 }
 
 body{
+
+height:100vh;
+overflow:hidden;
+
 background:
-linear-gradient(135deg,#0f172a,#1e293b,#312e81);
-min-height:100vh;
-padding:40px;
+linear-gradient(
+135deg,
+#ff512f,
+#dd2476,
+#7b2ff7,
+#00c6ff
+);
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+padding:18px;
+
 color:white;
+
 }
 
-h1{
+.title{
+
 text-align:center;
+
 font-size:42px;
-margin-bottom:35px;
+
+font-weight:900;
+
+margin-bottom:18px;
+
+text-shadow:
+0 0 20px white;
+
 }
 
-.container{
+.grid{
+
 display:grid;
+
+height:85vh;
+
 grid-template-columns:
-repeat(auto-fit,minmax(300px,1fr));
-gap:25px;
+repeat(3,1fr);
+
+grid-template-rows:
+1.2fr 1fr;
+
+gap:14px;
+
+}
+
+.hero{
+
+grid-column:1/4;
+
+background:
+linear-gradient(
+135deg,
+#ff9966,
+#ff5e62
+);
+
 }
 
 .clock{
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(16px);
-border:1px solid rgba(255,255,255,.15);
-padding:28px;
-border-radius:25px;
+
+border-radius:28px;
+
+padding:22px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+backdrop-filter:blur(20px);
 
 box-shadow:
-0 15px 40px rgba(0,0,0,.3);
+0 20px 50px rgba(0,0,0,.3);
 
-transition:.3s;
 }
 
-.clock:hover{
-transform:translateY(-6px);
+.card1{
+background:
+linear-gradient(
+135deg,
+#36d1dc,
+#5b86e5
+);
+}
+
+.card2{
+background:
+linear-gradient(
+135deg,
+#00f260,
+#0575e6
+);
+}
+
+.card3{
+background:
+linear-gradient(
+135deg,
+#fc466b,
+#3f5efb
+);
+}
+
+.card4{
+background:
+linear-gradient(
+135deg,
+#f7971e,
+#ffd200
+);
 }
 
 .city{
-font-size:28px;
-font-weight:700;
+
+font-size:32px;
+
+font-weight:800;
+
 margin-bottom:10px;
+
 }
 
-.zone{
-opacity:.8;
-margin-bottom:18px;
+.hero .city{
+font-size:52px;
 }
 
 .time{
-font-size:54px;
-font-weight:800;
-letter-spacing:2px;
+
+font-size:64px;
+
+font-weight:900;
+
 }
 
-.ampm{
-font-size:22px;
-color:#60a5fa;
+.hero .time{
+
+font-size:92px;
+
+}
+
+.zone{
+
+font-size:20px;
+
+opacity:.95;
+
+margin-top:10px;
+
 }
 
 .date{
-margin-top:14px;
-opacity:.8;
-font-size:16px;
+
+margin-top:12px;
+
+font-size:18px;
+
 }
 
 </style>
+
 </head>
 
 <body>
 
-<h1>🌎 World Time Dashboard</h1>
-
-<div class="container">
-
-<div class="clock">
-<div class="city">🇮🇳 India</div>
-<div class="zone">IST</div>
-<div class="time" id="india"></div>
-<div class="date" id="indiaDate"></div>
+<div class="title">
+🌴 FLORIDA CLOCKS 🌴
 </div>
 
-<div class="clock">
-<div class="city">🇺🇸 New York</div>
-<div class="zone">Eastern Time</div>
-<div class="time" id="ny"></div>
-<div class="date" id="nyDate"></div>
+<div class="grid">
+
+<div class="clock hero">
+
+<div class="city">
+Florida
 </div>
 
-<div class="clock">
-<div class="city">🇺🇸 Chicago</div>
-<div class="zone">Central Time</div>
-<div class="time" id="chi"></div>
-<div class="date" id="chiDate"></div>
+<div class="time" id="main"></div>
+
+<div class="zone">
+Eastern Time • AM / PM
 </div>
 
-<div class="clock">
-<div class="city">🇺🇸 Denver</div>
-<div class="zone">Mountain Time</div>
-<div class="time" id="den"></div>
-<div class="date" id="denDate"></div>
+<div class="date" id="mainDate"></div>
+
 </div>
 
-<div class="clock">
-<div class="city">🇺🇸 Los Angeles</div>
-<div class="zone">Pacific Time</div>
-<div class="time" id="la"></div>
-<div class="date" id="laDate"></div>
+
+<div class="clock card1">
+
+<div class="city">
+🏖 Miami
+</div>
+
+<div class="time" id="miami"></div>
+
+<div class="zone">
+Eastern
+</div>
+
+</div>
+
+
+<div class="clock card2">
+
+<div class="city">
+🎢 Orlando
+</div>
+
+<div class="time" id="orlando"></div>
+
+<div class="zone">
+Eastern
+</div>
+
+</div>
+
+
+<div class="clock card3">
+
+<div class="city">
+☀ Tampa
+</div>
+
+<div class="time" id="tampa"></div>
+
+<div class="zone">
+Eastern
+</div>
+
+</div>
+
+
+<div class="clock card4">
+
+<div class="city">
+🌊 Pensacola
+</div>
+
+<div class="time" id="pensacola"></div>
+
+<div class="zone">
+Central
+</div>
+
+</div>
+
+
+<div class="clock card1">
+
+<div class="city">
+🌅 Jacksonville
+</div>
+
+<div class="time" id="jax"></div>
+
+<div class="zone">
+Eastern
+</div>
+
 </div>
 
 </div>
 
 <script>
 
-function updateClock(id,dateId,zone){
+function show(id,zone,date=false){
 
 let now=new Date();
 
-let options={
+let time=
+now.toLocaleTimeString(
+'en-US',
+{
 timeZone:zone,
 hour:'2-digit',
 minute:'2-digit',
 second:'2-digit',
 hour12:true
-};
+}
+);
 
-let dateOptions={
+document
+.getElementById(id)
+.innerHTML=time;
+
+if(date){
+
+document
+.getElementById(
+id+"Date"
+)
+.innerHTML=
+
+now.toLocaleDateString(
+'en-US',
+{
 timeZone:zone,
+
 weekday:'long',
-year:'numeric',
+
 month:'long',
+
 day:'numeric'
-};
-
-let t=now.toLocaleTimeString(
-'en-US',
-options
+}
 );
-
-let d=now.toLocaleDateString(
-'en-US',
-dateOptions
-);
-
-document.getElementById(id)
-.innerHTML=t;
-
-document.getElementById(dateId)
-.innerHTML=d;
 
 }
 
-function refresh(){
+}
 
-updateClock(
-"india",
-"indiaDate",
-"Asia/Kolkata"
+function update(){
+
+show(
+"main",
+"America/New_York",
+true
 );
 
-updateClock(
-"ny",
-"nyDate",
+show(
+"miami",
 "America/New_York"
 );
 
-updateClock(
-"chi",
-"chiDate",
+show(
+"orlando",
+"America/New_York"
+);
+
+show(
+"tampa",
+"America/New_York"
+);
+
+show(
+"jax",
+"America/New_York"
+);
+
+show(
+"pensacola",
 "America/Chicago"
-);
-
-updateClock(
-"den",
-"denDate",
-"America/Denver"
-);
-
-updateClock(
-"la",
-"laDate",
-"America/Los_Angeles"
 );
 
 }
 
-refresh();
+update();
 
 setInterval(
-refresh,
+update,
 1000
 );
 
 </script>
 
 </body>
+
 </html>
