@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC 2027: Engineering Professional Blueprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --bg-main: #fcfaf7;
+            --card-bg: #ffffff;
+            --accent-primary: #2c3e50;
+            --accent-secondary: #7f8c8d;
+            --highlight: #d4a373;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--accent-primary);
+            scroll-behavior: smooth;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid var(--highlight);
+            color: var(--highlight);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-xl font-bold tracking-tight text-gray-800">UPSC <span class="text-amber-600">CSE 2027</span> Blueprint</h1>
+            <div class="flex flex-wrap justify-center gap-6 text-sm font-medium">
+                <button onclick="showSection('dashboard')" class="nav-link active py-1" id="btn-dashboard">Dashboard</button>
+                <button onclick="showSection('temporal')" class="nav-link py-1" id="btn-temporal">Temporal Audit</button>
+                <button onclick="showSection('routine')" class="nav-link py-1" id="btn-routine">Daily Routine</button>
+                <button onclick="showSection('roadmap')" class="nav-link py-1" id="btn-roadmap">Roadmap</button>
+                <button onclick="showSection('subjects')" class="nav-link py-1" id="btn-subjects">Subjects</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Sections -->
+    <main class="max-w-7xl mx-auto p-6 md:p-10">
+
+        <!-- 1. Executive Dashboard -->
+        <section id="dashboard" class="fade-in block">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-4">Strategic Overview</h2>
+                <p class="text-lg text-gray-600 leading-relaxed max-w-4xl">
+                    Welcome to your command center. This application translates the 1,889 hours of preparation potential into a structured, interactive roadmap. Your transition from GATE to UPSC requires focusing on process over outcome. Below is your current status and the countdown to May 23, 2027.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                    <span class="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-2">Countdown to Prelims</span>
+                    <div id="countdown" class="text-4xl font-bold tabular-nums">---</div>
+                    <span class="text-xs text-gray-400 mt-2">Target: May 23, 2027</span>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                    <span class="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-2">Total Capacity</span>
+                    <div class="text-4xl font-bold">1,889 <span class="text-xl font-normal text-gray-400">Hrs</span></div>
+                    <span class="text-xs text-gray-400 mt-2">Weekdays + Weekends</span>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                    <span class="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-2">Lecture Burden</span>
+                    <div class="text-4xl font-bold">250 <span class="text-xl font-normal text-gray-400">Videos</span></div>
+                    <span class="text-xs text-gray-400 mt-2">1.5x Speed Optimized</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold mb-4">The Mental Pivot</h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-4">
+                            <span class="h-6 w-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 font-bold">!</span>
+                            <p class="text-sm text-gray-600"><strong>From Vertical to Lateral:</strong> Stop looking for the "provable truth." UPSC tests socio-economic ambiguity and risk management.</p>
+                        </li>
+                        <li class="flex gap-4">
+                            <span class="h-6 w-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 font-bold">!</span>
+                            <p class="text-sm text-gray-600"><strong>Discipline > Motivation:</strong> Motivation fluctuates; the 07:15 - 08:30 morning block must be non-negotiable regardless of mood.</p>
+                        </li>
+                        <li class="flex gap-4">
+                            <span class="h-6 w-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 font-bold">!</span>
+                            <p class="text-sm text-gray-600"><strong>Process Focus:</strong> Treat each study session as a project milestone rather than a hurdle to parental validation.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl text-white shadow-xl flex flex-col justify-center">
+                    <h3 class="text-xl font-bold mb-2 text-amber-400">The "Engineer Advantage"</h3>
+                    <p class="text-sm leading-relaxed mb-4">
+                        Leverage your project management skills. Your ability to digest logical frameworks (Polity/Economy) and manage stress (Mock tests) is your edge. Use the "Tranche Strategy": partition the syllabus like a software engineering sprint.
+                    </p>
+                    <div class="border-l-4 border-amber-400 pl-4 italic text-sm text-gray-300">
+                        "Financial security acts as a psychological buffer. Your job is an asset, not a liability."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Temporal Audit Section -->
+        <section id="temporal" class="fade-in hidden">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold mb-4">The Mathematical Pathway</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    We've audited 339 days. This section visualizes where your time goes. The goal is to maximize the "Weekend Amplification" to compensate for corporate hours.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="chart-container">
+                        <canvas id="auditChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-amber-50 p-6 rounded-xl mb-6">
+                        <h4 class="font-bold text-amber-800 mb-2">Strategic Insight: Weekend Weighting</h4>
+                        <p class="text-sm text-amber-900 leading-relaxed">
+                            While weekdays provide consistency (1,210 hours), weekends are for depth (679 hours). A working professional clears UPSC by treating Saturdays as 'Full-Time Student' days.
+                        </p>
+                    </div>
+                    <div class="overflow-hidden rounded-xl border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left font-semibold text-gray-900">Metric</th>
+                                    <th class="px-6 py-3 text-left font-semibold text-gray-900">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr>
+                                    <td class="px-6 py-4">Total Weekdays</td>
+                                    <td class="px-6 py-4">242 Days</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4">Total Weekends</td>
+                                    <td class="px-6 py-4">97 Days</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4">Weekday Daily Target</td>
+                                    <td class="px-6 py-4">5.0 Hours</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4">Weekend Daily Target</td>
+                                    <td class="px-6 py-4">7.0 Hours</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Daily Routine Section -->
+        <section id="routine" class="fade-in hidden">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold mb-4">Routine Optimization</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    The "Lecture Fragmentation" trap is your biggest risk. We've shifted lectures to the evening block to ensure cognitive flow and uninterrupted learning.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Proposed vs Optimized -->
+                <div class="p-6 bg-white rounded-2xl border border-red-100 shadow-sm opacity-60">
+                    <div class="flex items-center gap-2 mb-4 text-red-600">
+                        <span class="font-bold">Original Proposal</span>
+                        <span class="text-xs bg-red-100 px-2 py-0.5 rounded">Inefficient</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-red-50 rounded text-sm line-through text-gray-400">07:15 - 08:30: Watch Lecture (75 mins)</div>
+                        <p class="text-xs text-red-800">Problem: A 120-min lecture cannot fit in 75 mins. Breaking it mid-way kills comprehension.</p>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-white rounded-2xl border border-green-100 shadow-md">
+                    <div class="flex items-center gap-2 mb-4 text-green-600">
+                        <span class="font-bold">Optimized Routine</span>
+                        <span class="text-xs bg-green-100 px-2 py-0.5 rounded">Recommended</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-green-600 text-white text-xs px-2 py-1 rounded mt-1">MORNING</div>
+                            <div>
+                                <span class="block font-semibold">07:15 - 08:30 (High Focus)</span>
+                                <span class="text-xs text-gray-500">Active Recall of previous night + Editorial Reading.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="bg-amber-500 text-white text-xs px-2 py-1 rounded mt-1">TRANSIT</div>
+                            <div>
+                                <span class="block font-semibold">Commute (45 mins)</span>
+                                <span class="text-xs text-gray-500">Anki Flashcards / Spaced Repetition on phone.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="bg-indigo-600 text-white text-xs px-2 py-1 rounded mt-1">EVENING</div>
+                            <div>
+                                <span class="block font-semibold">21:00 - 00:00 (Deep Flow)</span>
+                                <span class="text-xs text-gray-500">Full 120-min lecture + 60-min Note Consolidation.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Roadmap Section -->
+        <section id="roadmap" class="fade-in hidden">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold mb-4">3-Phase Operational Timeline</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    Preparations fail due to pacing errors. We've divided your year into three distinct tranches to prevent late-stage burnout.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 mb-10">
+                <button onclick="updateRoadmap(1)" id="btn-p1" class="flex-1 bg-white p-6 rounded-xl border-l-4 border-amber-400 shadow-sm text-left hover:shadow-md transition-all active-phase">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Phase 1</span>
+                    <h4 class="font-bold">Foundation</h4>
+                    <p class="text-xs text-gray-500">Jun '26 - Dec '26</p>
+                </button>
+                <button onclick="updateRoadmap(2)" id="btn-p2" class="flex-1 bg-white p-6 rounded-xl border-l-4 border-indigo-400 shadow-sm text-left hover:shadow-md transition-all">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Phase 2</span>
+                    <h4 class="font-bold">Consolidation</h4>
+                    <p class="text-xs text-gray-500">Jan '27 - Feb '27</p>
+                </button>
+                <button onclick="updateRoadmap(3)" id="btn-p3" class="flex-1 bg-white p-6 rounded-xl border-l-4 border-red-400 shadow-sm text-left hover:shadow-md transition-all">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Phase 3</span>
+                    <h4 class="font-bold">The Sprint</h4>
+                    <p class="text-xs text-gray-500">Mar '27 - May '27</p>
+                </button>
+            </div>
+
+            <div id="roadmap-content" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 min-h-[300px]">
+                <!-- Dynamic Content Loaded by JS -->
+            </div>
+        </section>
+
+        <!-- 5. Subjects Section -->
+        <section id="subjects" class="fade-in hidden">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold mb-4">The "Value" Framework</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    Not all subjects are equal. Environment and Geography form the largest block (30%), while Polity and Economy offer the highest ROI for your engineering logic.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold mb-6 text-center">Exam Weightage Matrix</h4>
+                    <div class="chart-container">
+                        <canvas id="subjectChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 bg-indigo-50 border-r-4 border-indigo-500 rounded-lg">
+                        <h5 class="font-bold text-indigo-900 text-sm">CSAT Warning (Engineering Hubris)</h5>
+                        <p class="text-xs text-indigo-800 mt-1">Don't ignore CSAT. Failing rates among engineers are high. Target 50 high-accuracy attempts rather than rushing all 80 questions.</p>
+                    </div>
+                    <div class="p-4 bg-green-50 border-r-4 border-green-500 rounded-lg">
+                        <h5 class="font-bold text-green-900 text-sm">The Environment-Geography Block</h5>
+                        <p class="text-xs text-green-800 mt-1">This 25-30% section is your ticket to clear Prelims. Focus on mapping and species conservation daily.</p>
+                    </div>
+                    <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
+                        <div class="px-4 py-2 bg-gray-50 border-b font-bold text-xs">Primary Resource Matrix</div>
+                        <div class="max-h-48 overflow-y-auto custom-scrollbar">
+                            <table class="w-full text-xs text-left">
+                                <tbody class="divide-y">
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-3 font-semibold">Polity</td>
+                                        <td class="p-3 text-gray-600">Laxmikanth + NCERT 11</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-3 font-semibold">Modern History</td>
+                                        <td class="p-3 text-gray-600">Spectrum + NCERT 12</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-3 font-semibold">Economy</td>
+                                        <td class="p-3 text-gray-600">Mrunal/Singhania + NCERT 12</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-3 font-semibold">Geography</td>
+                                        <td class="p-3 text-gray-600">NCERT 11 & 12 + Mapping</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-50 border-t border-gray-100 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-sm text-gray-500">
+                Created for the UPSC CSE 2027 Aspirant Cycle.
+            </div>
+            <div class="flex gap-4">
+                <span class="text-xs bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-bold">Process > Outcome</span>
+                <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-bold">First Attempt Validation</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // State Management
+        let currentSection = 'dashboard';
+        const targetDate = new Date("May 23, 2027 09:30:00").getTime();
+
+        // 1. Countdown Timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            const d = Math.floor(gap / day);
+            const h = Math.floor((gap % day) / hour);
+            const m = Math.floor((gap % hour) / minute);
+            const s = Math.floor((gap % minute) / second);
+
+            const el = document.getElementById('countdown');
+            if (el) el.innerText = `${d}d ${h}h ${m}m ${s}s`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 2. Navigation
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            currentSection = id;
+            if (id === 'temporal') initAuditChart();
+            if (id === 'subjects') initSubjectChart();
+        }
+
+        // 3. Roadmap Logic
+        const roadmapData = {
+            1: {
+                title: "Foundation & Aggressive Accumulation",
+                subtitle: "The Intellectual Heavy Lifting",
+                points: [
+                    "Consume 1 lecture per day (Evening 21:00-00:00). Completion by late February.",
+                    "Morning focus: Daily Current Affairs + Active Recall of the lecture taken 8 hours prior.",
+                    "Commute focus: Start building the Anki database for Geography and Polity.",
+                    "NCERT Milestone: Finish all Geography and History NCERTs (6-12) by September.",
+                    "Optional Subject: Finalize and complete 60% of the syllabus in weekend slots."
+                ]
+            },
+            2: {
+                title: "Consolidation & Output Generation",
+                subtitle: "Transition from Passive to Active",
+                points: [
+                    "Video backlog concludes. Free up the 21:00-00:00 block for synthesis.",
+                    "Begin sectional mock tests. Accuracy target: 60% in GS Paper I.",
+                    "Mains Discipline: Write 2 answers every weekend to practice 'narrative' style vs engineering 'bullets'.",
+                    "CSAT Diagnostic: Take a 2025/2026 paper test. If score < 90, allocate 3 hours every Sunday.",
+                    "Static Reinforcement: First full revision of Laxmikanth and Spectrum."
+                ]
+            },
+            3: {
+                title: "The Prelims Intensive Sprint",
+                subtitle: "No New Content; Absolute Mastery",
+                points: [
+                    "Stop watching new videos or reading new books. Focus 100% on Prelims.",
+                    "Morning MCQ Protocol: Solve 50 questions every morning (07:15-08:30).",
+                    "Revision Loop: Focus on Environment, Geography Mapping, and Economics Schemes.",
+                    "Circadian Alignment: Take full mocks on weekends at 09:30 and 14:30 sharp.",
+                    "Risk Management: Practice the 'Ego Rule' - skip math problems taking > 3 minutes."
+                ]
+            }
+        };
+
+        function updateRoadmap(phase) {
+            const data = roadmapData[phase];
+            const content = document.getElementById('roadmap-content');
+            
+            document.querySelectorAll('#roadmap button').forEach(b => b.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-50'));
+            document.getElementById('btn-p' + phase).classList.add('ring-2', 'ring-amber-400', 'bg-amber-50');
+
+            content.innerHTML = `
+                <div class="fade-in">
+                    <h3 class="text-2xl font-bold text-gray-800">${data.title}</h3>
+                    <p class="text-amber-600 font-semibold mb-6">${data.subtitle}</p>
+                    <ul class="space-y-4">
+                        ${data.points.map(p => `
+                            <li class="flex items-start gap-3">
+                                <span class="h-5 w-5 rounded-full border-2 border-amber-300 flex-shrink-0 mt-1"></span>
+                                <span class="text-gray-600">${p}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        updateRoadmap(1);
+
+        // 4. Charts
+        let auditChartInst, subjectChartInst;
+
+        function initAuditChart() {
+            if (auditChartInst) return;
+            const ctx = document.getElementById('auditChart').getContext('2d');
+            auditChartInst = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Weekday Hours', 'Weekend Hours'],
+                    datasets: [{
+                        data: [1210, 679],
+                        backgroundColor: ['#2c3e50', '#d4a373'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: 'Aggregate Capacity (1,889 Total)' }
+                    }
+                }
+            });
+        }
+
+        function initSubjectChart() {
+            if (subjectChartInst) return;
+            const ctx = document.getElementById('subjectChart').getContext('2d');
+            subjectChartInst = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Geo/Env', 'Curr Affairs', 'Polity', 'History', 'Economy', 'Science/Tech'],
+                    datasets: [{
+                        label: 'Weightage %',
+                        data: [28, 25, 18, 16, 14, 10],
+                        backgroundColor: '#d4a373',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 35 }
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
